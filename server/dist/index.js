@@ -25,6 +25,7 @@ const Post_1 = require("./entities/Post");
 const User_1 = require("./entities/User");
 const posts_1 = require("./resolvers/posts");
 const user_1 = require("./resolvers/user");
+const cors_1 = __importDefault(require("cors"));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield typeorm_1.createConnection({
         type: 'postgres',
@@ -36,6 +37,10 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         entities: [User_1.User, Post_1.Post],
     });
     const app = express_1.default();
+    app.use(cors_1.default({
+        origin: 'http://localhost:3000',
+        credentials: true,
+    }));
     const redis = new ioredis_1.default();
     const RedisStore = connect_redis_1.default(express_session_1.default);
     app.use(express_session_1.default({
@@ -61,7 +66,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         }),
         context: ({ req, res }) => ({ req, res }),
     });
-    apolloServer.applyMiddleware({ app });
+    apolloServer.applyMiddleware({ app, cors: false });
     app.listen(4000, () => {
         console.log('GraphQL server started at http://localhost:4000/graphql');
     });

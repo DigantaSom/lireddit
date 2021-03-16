@@ -12,6 +12,7 @@ import { User } from './entities/User';
 import { PostResolver } from './resolvers/posts';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
+import cors from 'cors';
 
 const main = async () => {
   await createConnection({
@@ -25,6 +26,13 @@ const main = async () => {
   });
 
   const app = express();
+
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    })
+  );
 
   const redis = new Redis();
   const RedisStore = connectRedis(session);
@@ -56,7 +64,7 @@ const main = async () => {
     context: ({ req, res }): MyContext => ({ req, res }),
   });
 
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
 
   app.listen(4000, () => {
     console.log('GraphQL server started at http://localhost:4000/graphql');
