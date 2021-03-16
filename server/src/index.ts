@@ -1,17 +1,18 @@
-import { createConnection } from 'typeorm';
-import { User } from './entities/User';
-import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
+import config from 'config';
+import express from 'express';
 import { buildSchema } from 'type-graphql';
+import { createConnection } from 'typeorm';
 import { Post } from './entities/Post';
+import { User } from './entities/User';
 import { PostResolver } from './resolvers/posts';
 import { UserResolver } from './resolvers/user';
 
 const main = async () => {
   await createConnection({
     type: 'postgres',
-    username: 'postgres',
-    password: 'postgresadmin',
+    username: config.get('DB_USERNAME') as string,
+    password: config.get('DB_PASSWORD') as string,
     database: 'zz_prac_db',
     logging: true,
     synchronize: true,

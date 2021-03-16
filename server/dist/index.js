@@ -12,19 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const typeorm_1 = require("typeorm");
-const User_1 = require("./entities/User");
-const express_1 = __importDefault(require("express"));
 const apollo_server_express_1 = require("apollo-server-express");
+const config_1 = __importDefault(require("config"));
+const express_1 = __importDefault(require("express"));
 const type_graphql_1 = require("type-graphql");
+const typeorm_1 = require("typeorm");
 const Post_1 = require("./entities/Post");
+const User_1 = require("./entities/User");
 const posts_1 = require("./resolvers/posts");
 const user_1 = require("./resolvers/user");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield typeorm_1.createConnection({
         type: 'postgres',
-        username: 'postgres',
-        password: 'postgresadmin',
+        username: config_1.default.get('DB_USERNAME'),
+        password: config_1.default.get('DB_PASSWORD'),
         database: 'zz_prac_db',
         logging: true,
         synchronize: true,
