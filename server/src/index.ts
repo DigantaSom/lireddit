@@ -11,6 +11,7 @@ import { Post } from './entities/Post';
 import { User } from './entities/User';
 import { PostResolver } from './resolvers/posts';
 import { UserResolver } from './resolvers/user';
+import { MyContext } from './types';
 
 const main = async () => {
   await createConnection({
@@ -52,6 +53,7 @@ const main = async () => {
       resolvers: [PostResolver, UserResolver],
       validate: false,
     }),
+    context: ({ req, res }): MyContext => ({ req, res }),
   });
 
   apolloServer.applyMiddleware({ app });

@@ -59,6 +59,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             resolvers: [posts_1.PostResolver, user_1.UserResolver],
             validate: false,
         }),
+        context: ({ req, res }) => ({ req, res }),
     });
     apolloServer.applyMiddleware({ app });
     app.listen(4000, () => {
