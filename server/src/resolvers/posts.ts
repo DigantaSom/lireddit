@@ -14,6 +14,7 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Post } from '../entities/Post';
+import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types';
 
@@ -38,6 +39,11 @@ export class PostResolver {
   @FieldResolver(() => String)
   textSnippet(@Root() post: Post) {
     return post.text.slice(0, 50);
+  }
+
+  @FieldResolver(() => User)
+  creator(@Root() post: Post, @Ctx() { userLoader }: MyContext): Promise<User> {
+    return userLoader.load(post.creatorId);
   }
 
   @Query(() => PaginatedPosts)

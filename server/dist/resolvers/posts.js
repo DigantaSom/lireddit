@@ -25,6 +25,7 @@ exports.PostResolver = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Post_1 = require("../entities/Post");
+const User_1 = require("../entities/User");
 const isAuth_1 = require("../middleware/isAuth");
 let PostInput = class PostInput {
 };
@@ -55,6 +56,9 @@ PaginatedPosts = __decorate([
 let PostResolver = class PostResolver {
     textSnippet(post) {
         return post.text.slice(0, 50);
+    }
+    creator(post, { userLoader }) {
+        return userLoader.load(post.creatorId);
     }
     posts(limit, cursor) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -111,6 +115,13 @@ __decorate([
     __metadata("design:paramtypes", [Post_1.Post]),
     __metadata("design:returntype", void 0)
 ], PostResolver.prototype, "textSnippet", null);
+__decorate([
+    type_graphql_1.FieldResolver(() => User_1.User),
+    __param(0, type_graphql_1.Root()), __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Post_1.Post, Object]),
+    __metadata("design:returntype", Promise)
+], PostResolver.prototype, "creator", null);
 __decorate([
     type_graphql_1.Query(() => PaginatedPosts),
     __param(0, type_graphql_1.Arg('limit', () => type_graphql_1.Int)),
