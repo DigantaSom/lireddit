@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/button';
-import { Box } from '@chakra-ui/layout';
+import { Box, Flex, Link } from '@chakra-ui/layout';
 import { Form, Formik } from 'formik';
+import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import InputField from '../components/InputField';
 import Wrapper from '../components/Wrapper';
@@ -44,6 +45,11 @@ const Login = () => {
             <Box mt={4}>
               <InputField label='Password' name='password' type='password' />
             </Box>
+            <Flex mt={2}>
+              <NextLink href='/forgot-password'>
+                <Link ml='auto'>Forgot password</Link>
+              </NextLink>
+            </Flex>
             <Button type='submit' colorScheme='teal' mt={4} isLoading={isSubmitting}>
               Login
             </Button>
