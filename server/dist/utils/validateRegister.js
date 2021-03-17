@@ -21,7 +21,7 @@ const validateRegister = (options) => {
     if (options.username.length <= 4) {
         return [
             {
-                field: 'Username',
+                field: 'username',
                 message: 'Username length must be greater than 4',
             },
         ];
@@ -29,7 +29,7 @@ const validateRegister = (options) => {
     if (options.password.length <= 4) {
         return [
             {
-                field: 'Password',
+                field: 'password',
                 message: 'password length must be greater than 4',
             },
         ];
