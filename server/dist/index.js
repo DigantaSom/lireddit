@@ -15,9 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const apollo_server_express_1 = require("apollo-server-express");
 const config_1 = __importDefault(require("config"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
+const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const ioredis_1 = __importDefault(require("ioredis"));
+const path_1 = __importDefault(require("path"));
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const constants_1 = require("./constants");
@@ -25,9 +27,8 @@ const Post_1 = require("./entities/Post");
 const User_1 = require("./entities/User");
 const posts_1 = require("./resolvers/posts");
 const user_1 = require("./resolvers/user");
-const cors_1 = __importDefault(require("cors"));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield typeorm_1.createConnection({
+    const conn = yield typeorm_1.createConnection({
         type: 'postgres',
         username: config_1.default.get('DB_USERNAME'),
         password: config_1.default.get('DB_PASSWORD'),
@@ -35,7 +36,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         logging: true,
         synchronize: true,
         entities: [User_1.User, Post_1.Post],
+        migrations: [path_1.default.join(__dirname, './migrations/*')],
     });
+    yield conn.runMigrations();
     const app = express_1.default();
     app.use(cors_1.default({
         origin: 'http://localhost:3000',

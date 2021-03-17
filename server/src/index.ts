@@ -1,9 +1,11 @@
 import { ApolloServer } from 'apollo-server-express';
 import config from 'config';
 import connectRedis from 'connect-redis';
+import cors from 'cors';
 import express from 'express';
 import session from 'express-session';
 import Redis from 'ioredis';
+import path from 'path';
 import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import { COOKIE_NAME, __prod__ } from './constants';
@@ -12,10 +14,9 @@ import { User } from './entities/User';
 import { PostResolver } from './resolvers/posts';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
-import cors from 'cors';
 
 const main = async () => {
-  await createConnection({
+  const conn = await createConnection({
     type: 'postgres',
     username: config.get('DB_USERNAME') as string,
     password: config.get('DB_PASSWORD') as string,
@@ -23,7 +24,10 @@ const main = async () => {
     logging: true,
     synchronize: true,
     entities: [User, Post],
+    migrations: [path.join(__dirname, './migrations/*')],
   });
+
+  await conn.runMigrations();
 
   const app = express();
 
