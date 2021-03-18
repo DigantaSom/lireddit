@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/layout';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import InputField from '../components/InputField';
-import Wrapper from '../components/Wrapper';
+import Layout from '../components/Layout';
 import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { withApollo } from '../utils/withApollo';
@@ -13,7 +13,7 @@ const Register = () => {
   const router = useRouter();
 
   return (
-    <Wrapper variant='small'>
+    <Layout variant='small'>
       <Formik
         initialValues={{ username: '', email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -56,7 +56,7 @@ const Register = () => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Layout>
   );
 };
 

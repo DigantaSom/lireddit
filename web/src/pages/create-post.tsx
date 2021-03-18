@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/router';
 import React from 'react';
 import InputField from '../components/InputField';
-import Wrapper from '../components/Wrapper';
+import Layout from '../components/Layout';
 import { useCreatePostMutation } from '../generated/graphql';
 import { useIsAuth } from '../utils/useIsAuth';
 import { withApollo } from '../utils/withApollo';
@@ -15,7 +15,7 @@ const CreatePost = () => {
   useIsAuth();
 
   return (
-    <Wrapper variant='small'>
+    <Layout variant='small'>
       <Formik
         initialValues={{ title: '', text: '' }}
         onSubmit={async values => {
@@ -46,7 +46,7 @@ const CreatePost = () => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Layout>
   );
 };
 

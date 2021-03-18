@@ -4,7 +4,7 @@ import { Form, Formik } from 'formik';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import InputField from '../components/InputField';
-import Wrapper from '../components/Wrapper';
+import Layout from '../components/Layout';
 import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import { withApollo } from '../utils/withApollo';
@@ -14,7 +14,7 @@ const Login = () => {
   const router = useRouter();
 
   return (
-    <Wrapper variant='small'>
+    <Layout variant='small'>
       <Formik
         initialValues={{ usernameOrEmail: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
@@ -63,7 +63,7 @@ const Login = () => {
           </Form>
         )}
       </Formik>
-    </Wrapper>
+    </Layout>
   );
 };
 
