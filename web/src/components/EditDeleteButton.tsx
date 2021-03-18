@@ -1,7 +1,8 @@
 import { IconButton } from '@chakra-ui/button';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
-import { Flex } from '@chakra-ui/layout';
+import { Flex, Link } from '@chakra-ui/layout';
 import { useDeletePostMutation, useMeQuery } from '../generated/graphql';
+import NextLink from 'next/link';
 
 interface EditDeleteButtonProps {
   postId: number;
@@ -18,7 +19,13 @@ const EditDeleteButton: React.FC<EditDeleteButtonProps> = ({ postId, creatorId }
 
   return (
     <Flex flexDirection='column'>
-      <IconButton aria-label='Edit post' mb={2} icon={<EditIcon />} onClick={() => {}} />
+      <NextLink
+        href={{
+          pathname: '/post/edit/[id]',
+          query: { id: postId },
+        }}>
+        <IconButton as={Link} aria-label='Edit post' mb={2} icon={<EditIcon />} />
+      </NextLink>
       <IconButton
         aria-label='Edit post'
         icon={<DeleteIcon />}
