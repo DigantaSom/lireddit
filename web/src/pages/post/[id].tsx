@@ -12,6 +12,7 @@ const Post = () => {
     variables: {
       id: postId,
     },
+    skip: postId === -1,
   });
 
   if (loading) {
