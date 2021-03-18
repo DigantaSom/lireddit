@@ -28,6 +28,8 @@ const Login = () => {
                   me: data?.login.user,
                 },
               });
+              // to show logged in user's updoot/downdoots on posts (if any)
+              cache.evict({ fieldName: 'posts' });
             },
           });
 
