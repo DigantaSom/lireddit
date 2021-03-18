@@ -19,11 +19,6 @@ const Navbar = () => {
   } else if (!data?.me) {
     body = (
       <>
-        <NextLink href='/create-post'>
-          <Button as={Link} mr={2}>
-            Create Post
-          </Button>
-        </NextLink>
         <NextLink href='/login'>
           <Link mr={2}>Login</Link>
         </NextLink>
@@ -35,6 +30,11 @@ const Navbar = () => {
   } else {
     body = (
       <Flex alignItems='center'>
+        <NextLink href='/create-post'>
+          <Button as={Link} mr={2}>
+            Create Post
+          </Button>
+        </NextLink>
         <Box mr={2}>{data.me.username}</Box>
         <Button
           variant='link'
@@ -57,9 +57,7 @@ const Navbar = () => {
             <Heading>LiReddit</Heading>
           </Link>
         </NextLink>
-        <Flex ml='auto' alignItems='center'>
-          {body}
-        </Flex>
+        <Flex ml='auto'>{body}</Flex>
       </Flex>
     </Flex>
   );
