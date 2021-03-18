@@ -23,7 +23,7 @@ const main = async () => {
     type: 'postgres',
     username: config.get('DB_USERNAME') as string,
     password: config.get('DB_PASSWORD') as string,
-    database: 'zz_prac_db',
+    database: config.get('DB_NAME') as string,
     logging: true,
     synchronize: true,
     entities: [User, Post, Updoot],

@@ -35,7 +35,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         type: 'postgres',
         username: config_1.default.get('DB_USERNAME'),
         password: config_1.default.get('DB_PASSWORD'),
-        database: 'zz_prac_db',
+        database: config_1.default.get('DB_NAME'),
         logging: true,
         synchronize: true,
         entities: [User_1.User, Post_1.Post, Updoots_1.Updoot],
