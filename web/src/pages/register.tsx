@@ -6,6 +6,7 @@ import InputField from '../components/InputField';
 import Wrapper from '../components/Wrapper';
 import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
+import { withApollo } from '../utils/withApollo';
 
 const Register = () => {
   const [register] = useRegisterMutation();
@@ -59,4 +60,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default withApollo({ ssr: false })(Register);

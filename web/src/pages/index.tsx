@@ -1,4 +1,5 @@
 import Layout from '../components/Layout';
+import { withApollo } from '../utils/withApollo';
 
 const Index = () => {
   return (
@@ -8,4 +9,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withApollo({ ssr: true })(Index);
