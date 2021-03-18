@@ -1,5 +1,6 @@
 import { Button } from '@chakra-ui/button';
 import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/layout';
+import EditDeleteButton from '../components/EditDeleteButton';
 import Layout from '../components/Layout';
 import UpdootSection from '../components/UpdootSection';
 import { usePostsQuery } from '../generated/graphql';
@@ -31,10 +32,11 @@ const Index = () => {
         {data?.posts.posts.map(p => (
           <Flex key={p.id} p={5} shadow='md' borderWidth='1px' alignItems='center'>
             <UpdootSection post={p} />
-            <Box ml={6}>
+            <Box ml={6} flex={1}>
               <Heading fontSize='xl'>{p.title}</Heading>
               <Text mt={4}>{p.textSnippet}</Text>
             </Box>
+            <EditDeleteButton />
           </Flex>
         ))}
       </Stack>
