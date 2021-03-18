@@ -24,9 +24,11 @@ const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const constants_1 = require("./constants");
 const Post_1 = require("./entities/Post");
+const Updoots_1 = require("./entities/Updoots");
 const User_1 = require("./entities/User");
 const posts_1 = require("./resolvers/posts");
 const user_1 = require("./resolvers/user");
+const createUpdootLoader_1 = require("./utils/createUpdootLoader");
 const createUserLoader_1 = require("./utils/createUserLoader");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield typeorm_1.createConnection({
@@ -36,7 +38,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         database: 'zz_prac_db',
         logging: true,
         synchronize: true,
-        entities: [User_1.User, Post_1.Post],
+        entities: [User_1.User, Post_1.Post, Updoots_1.Updoot],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
     });
     yield conn.runMigrations();
@@ -73,6 +75,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             res,
             redis,
             userLoader: createUserLoader_1.createUserLoader(),
+            updootLoader: createUpdootLoader_1.createUpdootLoader(),
         }),
     });
     apolloServer.applyMiddleware({ app, cors: false });

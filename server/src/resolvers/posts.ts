@@ -14,6 +14,7 @@ import {
 } from 'type-graphql';
 import { getConnection } from 'typeorm';
 import { Post } from '../entities/Post';
+import { Updoot } from '../entities/Updoots';
 import { User } from '../entities/User';
 import { isAuth } from '../middleware/isAuth';
 import { MyContext } from '../types';
@@ -44,6 +45,18 @@ export class PostResolver {
   @FieldResolver(() => User)
   creator(@Root() post: Post, @Ctx() { userLoader }: MyContext): Promise<User> {
     return userLoader.load(post.creatorId);
+  }
+
+  @FieldResolver(() => Int, { nullable: true })
+  async voteStatus(@Root() post: Post, @Ctx() { req, updootLoader }: MyContext) {
+    if (!req.session.userId) {
+      return null;
+    }
+    const updoot = await updootLoader.load({
+      userId: req.session.userId,
+      postId: post.id,
+    });
+    return updoot ? updoot.value : null;
   }
 
   @Query(() => PaginatedPosts)
@@ -115,6 +128,64 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async deletePost(@Arg('id', () => Int) id: number, @Ctx() { req }: MyContext) {
     await Post.delete({ id, creatorId: req.session.userId });
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async vote(
+    @Arg('postId', () => Int) postId: number,
+    @Arg('value', () => Int) value: number,
+    @Ctx() { req }: MyContext
+  ) {
+    const isUpdoot = value !== -1;
+    const realValue = isUpdoot ? 1 : -1;
+
+    const { userId } = req.session;
+
+    const updoot = await Updoot.findOne({ where: { userId, postId } });
+
+    // if the user has already voted on the post before, and they want to change their vote
+    if (updoot && updoot.value !== realValue) {
+      await getConnection().transaction(async tm => {
+        await tm.query(
+          `
+          UPDATE updoot
+          SET value = $1
+          WHERE "userId" = $2 AND "postId" = $3
+        `,
+          [realValue, userId, postId]
+        );
+        await tm.query(
+          `
+          UPDATE post
+          SET points = points + $1
+          WHERE id = $2
+        `,
+          [2 * realValue, postId]
+        );
+      });
+    } else if (!updoot) {
+      // if the user is voting on the post for the first time
+      await getConnection().transaction(async tm => {
+        await tm.query(
+          `
+          INSERT INTO updoot ("userId", "postId", value)
+          VALUES ($1, $2, $3)
+        `,
+          [userId, postId, realValue]
+        );
+        await tm.query(
+          `
+          UPDATE post
+          SET points = points + $1
+          WHERE id = $2
+        `,
+          [realValue, postId]
+        );
+      });
+    }
+
     return true;
   }
 }

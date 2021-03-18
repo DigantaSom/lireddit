@@ -10,10 +10,12 @@ import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import { COOKIE_NAME, __prod__ } from './constants';
 import { Post } from './entities/Post';
+import { Updoot } from './entities/Updoots';
 import { User } from './entities/User';
 import { PostResolver } from './resolvers/posts';
 import { UserResolver } from './resolvers/user';
 import { MyContext } from './types';
+import { createUpdootLoader } from './utils/createUpdootLoader';
 import { createUserLoader } from './utils/createUserLoader';
 
 const main = async () => {
@@ -24,7 +26,7 @@ const main = async () => {
     database: 'zz_prac_db',
     logging: true,
     synchronize: true,
-    entities: [User, Post],
+    entities: [User, Post, Updoot],
     migrations: [path.join(__dirname, './migrations/*')],
   });
 
@@ -71,6 +73,7 @@ const main = async () => {
       res,
       redis,
       userLoader: createUserLoader(),
+      updootLoader: createUpdootLoader(),
     }),
   });
 
