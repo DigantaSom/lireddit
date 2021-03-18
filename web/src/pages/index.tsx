@@ -1,6 +1,7 @@
 import { Button } from '@chakra-ui/button';
 import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/layout';
 import Layout from '../components/Layout';
+import UpdootSection from '../components/UpdootSection';
 import { usePostsQuery } from '../generated/graphql';
 import { withApollo } from '../utils/withApollo';
 
@@ -29,7 +30,7 @@ const Index = () => {
       <Stack spacing={8}>
         {data?.posts.posts.map(p => (
           <Flex key={p.id} p={5} shadow='md' borderWidth='1px' alignItems='center'>
-            <Box>Votes section</Box>
+            <UpdootSection post={p} />
             <Box ml={6}>
               <Heading fontSize='xl'>{p.title}</Heading>
               <Text mt={4}>{p.textSnippet}</Text>
