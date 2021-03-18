@@ -1,5 +1,6 @@
 import { Button } from '@chakra-ui/button';
-import { Box, Flex, Heading, Stack, Text } from '@chakra-ui/layout';
+import { Box, Flex, Heading, Link, Stack, Text } from '@chakra-ui/layout';
+import NextLink from 'next/link';
 import EditDeleteButton from '../components/EditDeleteButton';
 import Layout from '../components/Layout';
 import UpdootSection from '../components/UpdootSection';
@@ -33,7 +34,15 @@ const Index = () => {
           <Flex key={p.id} p={5} shadow='md' borderWidth='1px' alignItems='center'>
             <UpdootSection post={p} />
             <Box ml={6} flex={1}>
-              <Heading fontSize='xl'>{p.title}</Heading>
+              <NextLink
+                href={{
+                  pathname: '/post/[id]',
+                  query: { id: p.id },
+                }}>
+                <Heading as={Link} fontSize='xl'>
+                  {p.title}
+                </Heading>
+              </NextLink>
               <Text mt={4}>{p.textSnippet}</Text>
             </Box>
             <EditDeleteButton postId={p.id} creatorId={p.creator.id} />

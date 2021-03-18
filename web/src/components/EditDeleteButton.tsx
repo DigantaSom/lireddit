@@ -1,24 +1,31 @@
 import { IconButton } from '@chakra-ui/button';
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { Flex, Link } from '@chakra-ui/layout';
-import { useDeletePostMutation, useMeQuery } from '../generated/graphql';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { useDeletePostMutation, useMeQuery } from '../generated/graphql';
 
 interface EditDeleteButtonProps {
   postId: number;
   creatorId: number;
+  singlePostPage?: boolean;
 }
 
-const EditDeleteButton: React.FC<EditDeleteButtonProps> = ({ postId, creatorId }) => {
+const EditDeleteButton: React.FC<EditDeleteButtonProps> = ({
+  postId,
+  creatorId,
+  singlePostPage,
+}) => {
   const { data: meData } = useMeQuery();
   const [deletePost] = useDeletePostMutation();
+  const router = useRouter();
 
   if (meData?.me?.id !== creatorId) {
     return null;
   }
 
   return (
-    <Flex flexDirection='column'>
+    <Flex flexDirection={singlePostPage ? 'row' : 'column'}>
       <NextLink
         href={{
           pathname: '/post/edit/[id]',
@@ -36,6 +43,10 @@ const EditDeleteButton: React.FC<EditDeleteButtonProps> = ({ postId, creatorId }
             },
             update: cache => {
               cache.evict({ id: 'Post:' + postId });
+
+              if (singlePostPage) {
+                router.replace('/');
+              }
             },
           });
         }}
