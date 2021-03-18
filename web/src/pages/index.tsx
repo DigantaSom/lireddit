@@ -36,7 +36,7 @@ const Index = () => {
               <Heading fontSize='xl'>{p.title}</Heading>
               <Text mt={4}>{p.textSnippet}</Text>
             </Box>
-            <EditDeleteButton />
+            <EditDeleteButton postId={p.id} creatorId={p.creator.id} />
           </Flex>
         ))}
       </Stack>
